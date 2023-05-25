@@ -1,0 +1,4 @@
+FROM minio/minio:RELEASE.2022-05-23T18-45-11Z
+ENV MINIO_ROOT_USER=dsp
+ENV MINIO_ROOT_PASSWORD=dsppassword
+ADD ./minio/data /data

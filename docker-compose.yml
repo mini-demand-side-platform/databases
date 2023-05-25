@@ -1,0 +1,24 @@
+version: "2.2"
+services:  
+  postgresql:
+    build:
+      dockerfile: ./postgresql/dockerfile
+      context: .
+    ports:
+      - "5432:5432"
+  minio:
+    build: 
+      dockerfile: ./minio/dockerfile
+      context: .
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment: 
+      - minio_uri=ml-storage:9000
+    command: server /data --console-address ":9001"
+  redis:
+    build:
+      dockerfile: ./redis/dockerfile
+      context: .
+    ports:
+      - "6379:6379"
