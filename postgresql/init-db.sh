@@ -6,7 +6,7 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
     CREATE DATABASE feature_store;
     GRANT ALL PRIVILEGES ON DATABASE olap TO "$POSTGRES_USER";
     GRANT ALL PRIVILEGES ON DATABASE oltp TO "$POSTGRES_USER";
-    GRANT ALL PRIVILEGES ON DATABASE feature_store TO "$POSTGRES_USER";
+    CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 EOSQL
 gunzip < /ctr_dataset.gz |psql --username "$POSTGRES_USER" --dbname olap 
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname oltp <<-EOSQL
@@ -34,17 +34,18 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname oltp <<-EOSQL
         (1955, True, 8, 'IBE', 'Coat', 'I', 'KX', 1322.76), 
         (1504, False, 5, 'AJL', 'Ankle boot', 'III', 'HA', 3183.88);
 EOSQL
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname feature_store <<-EOSQL
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname olap <<-EOSQL
     CREATE TABLE feature_store (
-        feature_store_id SERIAL PRIMARY KEY,
+        feature_store_id text PRIMARY KEY DEFAULT substring(uuid_generate_v4()::text, 1, 8),
         feature_store_name text,
         description text,
         offline_table_name text
     );
     CREATE TABLE feature (
-        feature_store_id INTEGER REFERENCES feature_store (feature_store_id),
-        feature_id SERIAL PRIMARY KEY,
+        feature_store_id TEXT REFERENCES feature_store (feature_store_id),
+        feature_id text PRIMARY KEY DEFAULT substring(uuid_generate_v4()::text, 1, 8),
         feature_name text,
+        feature_function_type text,
         description text,
         function_name text
     );
