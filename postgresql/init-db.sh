@@ -7,7 +7,7 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
     GRANT ALL PRIVILEGES ON DATABASE olap TO "$POSTGRES_USER";
     GRANT ALL PRIVILEGES ON DATABASE oltp TO "$POSTGRES_USER";
 EOSQL
-gunzip < /ctr_dataset.gz |psql --username "$POSTGRES_USER" --dbname olap 
+gunzip < /ctr_dataset.sql.gz |psql --username "$POSTGRES_USER" --dbname olap 
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname oltp <<-EOSQL
     CREATE TABLE ad (
         ad_id integer NOT NULL,
