@@ -6,7 +6,6 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
     CREATE DATABASE feature_store;
     GRANT ALL PRIVILEGES ON DATABASE olap TO "$POSTGRES_USER";
     GRANT ALL PRIVILEGES ON DATABASE oltp TO "$POSTGRES_USER";
-    CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 EOSQL
 gunzip < /ctr_dataset.gz |psql --username "$POSTGRES_USER" --dbname olap 
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname oltp <<-EOSQL
@@ -14,11 +13,11 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname oltp <<-EOSQL
         ad_id integer NOT NULL,
         status boolean,
         bidding_cpc integer,
-        advertiser text,
-        banner_style text,
-        category text,
-        layout_style text,
-        item_price  double precision
+        advertiser varchar(50),
+        banner_style varchar(50),
+        category varchar(50),
+        layout_style varchar(50),
+        item_price  real
     );
     INSERT INTO 
         ad (ad_id, status, bidding_cpc, advertiser, category, banner_style, layout_style, item_price)
@@ -35,18 +34,21 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname oltp <<-EOSQL
         (1504, False, 5, 'AJL', 'Ankle boot', 'III', 'HA', 3183.88);
 EOSQL
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname olap <<-EOSQL
+    CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
     CREATE TABLE feature_store (
-        feature_store_id text PRIMARY KEY DEFAULT substring(uuid_generate_v4()::text, 1, 8),
-        feature_store_name text,
-        description text,
-        offline_table_name text
+        feature_store_id char(8) PRIMARY KEY DEFAULT substring(uuid_generate_v4()::char(8), 1, 8),
+        feature_store_name varchar(50),
+        description varchar(50),
+        offline_table_name varchar(50)
     );
     CREATE TABLE feature (
-        feature_store_id TEXT REFERENCES feature_store (feature_store_id),
-        feature_id text PRIMARY KEY DEFAULT substring(uuid_generate_v4()::text, 1, 8),
-        feature_name text,
-        feature_function_type text,
-        description text,
-        function_name text
+        feature_store_id char(8) REFERENCES feature_store (feature_store_id),
+        feature_id char(8) PRIMARY KEY DEFAULT substring(uuid_generate_v4()::char(8), 1, 8),
+        feature_name varchar(50),
+        source_table_name varchar(50),
+        source_column_name varchar(50),
+        feature_function_type varchar(50),
+        description varchar(50),
+        function_name varchar(50)
     );
 EOSQL
