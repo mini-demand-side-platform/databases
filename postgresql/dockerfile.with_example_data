@@ -1,6 +1,10 @@
 FROM postgres:12.5-alpine
-ADD ./postgresql/init-db.sh /docker-entrypoint-initdb.d/
-ADD ./postgresql/ctr_dataset.sql.gz /ctr_dataset.sql.gz
+COPY ./postgresql/init-db.with-example-data.sh /docker-entrypoint-initdb.d/
+COPY ./postgresql/ctr_dataset.sql.gz /ctr_dataset.sql.gz
+COPY ./postgresql/ad.sql.gz /ad.sql.gz
+COPY ./postgresql/feature_store_schema.sql.gz /feature_store_schema.sql.gz
+COPY ./postgresql/feature_store_data.sql.gz /feature_store_data.sql.gz
+COPY ./postgresql/offline_table_top_10_features.sql.gz /offline_table_top_10_features.sql.gz
 ENV POSTGRES_USER=dsp
 ENV POSTGRES_PASSWORD=dsppassword
 ENV PGDATA=/var/lib/postgresql/data/pgdata

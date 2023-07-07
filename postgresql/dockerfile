@@ -1,6 +1,6 @@
 FROM postgres:12.5-alpine
-ADD ./postgresql/init-db.sh /docker-entrypoint-initdb.d/
-ADD ./postgresql/ctr_dataset.sql.gz /ctr_dataset.sql.gz
+COPY ./postgresql/init-db.sh /docker-entrypoint-initdb.d/
+COPY ./postgresql/feature_store_schema.sql.gz /feature_store_schema.sql.gz
 ENV POSTGRES_USER=dsp
 ENV POSTGRES_PASSWORD=dsppassword
 ENV PGDATA=/var/lib/postgresql/data/pgdata

@@ -1,0 +1,4 @@
+FROM redis:7.0.11-alpine
+COPY ./redis/redis.conf /usr/local/etc/redis/redis.conf
+COPY ./redis/dump.rdb  /data/dump.rdb
+CMD [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
