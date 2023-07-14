@@ -31,9 +31,9 @@ services:
     entrypoint: >
       /bin/sh -c "
       /usr/bin/mc config host add mini-demand-side-platform http://minio:9000 dsp dsppassword;
-      /usr/bin/mc rm -r --force mini-demand-side-platform/sklearn-models;
-      /usr/bin/mc mb mini-demand-side-platform/sklearn-models;
-      /usr/bin/mc policy download mini-demand-side-platform/sklearn-models;
-      /usr/bin/mc cp -r /tmp/data/default-model mini-demand-side-platform/sklearn-models;
+      /usr/bin/mc rm -r --force mini-demand-side-platform/models;
+      /usr/bin/mc mb mini-demand-side-platform/models;
+      /usr/bin/mc policy download mini-demand-side-platform/models;
+      /usr/bin/mc cp -r /tmp/data/model-default mini-demand-side-platform/models;
       exit 0;
       "
