@@ -6,6 +6,8 @@ services:
       context: .
     ports:
       - "5432:5432"
+    networks:
+      - mini-demand-side-platform
   minio:
     build: 
       dockerfile: ./minio/dockerfile
@@ -16,9 +18,17 @@ services:
     environment: 
       - minio_uri=ml-storage:9000
     command: server /data --console-address ":9001"
+    networks:
+      - mini-demand-side-platform
   redis:
     build:
       dockerfile: ./redis/dockerfile
       context: .
     ports:
       - "6379:6379"
+    networks:
+      - mini-demand-side-platform
+networks:
+  mini-demand-side-platform:
+    name: mini-demand-side-platform
+    driver: bridge
