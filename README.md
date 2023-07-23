@@ -3,7 +3,7 @@ This is the databases config files for the [mini-demand-side-platform](https://g
 
 
 ## Contain
-The usernames for the following databases are **dsp**, and their corresponding passwords are **dsppassword**.
+The username of the following databases is `dsp`, with the password `dsppassword`.
 #### Postgresql
 Data for [machine learning training](https://github.com/mini-demand-side-platform/ml-training), [feature store](https://github.com/mini-demand-side-platform/feature-store) and the [bidder server](https://github.com/mini-demand-side-platform/bidding-server).
 
@@ -25,7 +25,7 @@ make redis-cli
 #### Minio UI 
 http://localhost:9000
 
-## Requirments
+## Requirements
 - Docker 
 - Docker-compose 
 - make
